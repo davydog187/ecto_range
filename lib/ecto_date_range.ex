@@ -8,18 +8,21 @@ defmodule Ecto.DateRange do
   defstruct [:range, :lower_inclusive, :upper_inclusive]
 
   @type t :: %__MODULE__{
-          range: DateRange.t(),
+          range: Date.Range.t(),
           lower_inclusive: boolean(),
           upper_inclusive: boolean()
         }
 
+  @impl Ecto.Type
   def type, do: :daterange
 
+  @impl Ecto.Type
   def cast(term) do
     dbg()
     :error
   end
 
+  @impl Ecto.Type
   def dump(%Date.Range{} = range) do
     dbg()
 
@@ -32,16 +35,13 @@ defmodule Ecto.DateRange do
      }}
   end
 
-  def embed_as(term) do
-    dbg()
-    :error
-  end
-
+  @impl Ecto.Type
   def equal?(one, two) do
     dbg()
-    :error
+    true
   end
 
+  @impl Ecto.Type
   def load(%Postgrex.Range{lower: lower, upper: upper}) do
     dbg()
 
