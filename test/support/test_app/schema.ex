@@ -1,4 +1,5 @@
 defmodule TestApp.Table do
+  @moduledoc false
   use Ecto.Schema
 
   schema "my_table" do
