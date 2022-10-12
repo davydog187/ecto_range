@@ -63,7 +63,8 @@ defmodule EctoDateRangeTest do
                   upper_inclusive: true
                 }}
 
-      range = {nil, "2021-03-01"}
+      # treat empty string as nil
+      range = {"", "2021-03-01"}
 
       assert Ecto.DateRange.cast(range) ==
                {:ok,

@@ -128,6 +128,7 @@ defmodule Ecto.DateRange do
     case d do
       %Date{} -> {:ok, d}
       nil -> {:ok, nil}
+      "" -> {:ok, nil}
       other -> Ecto.Type.cast(:date, other)
     end
   end
