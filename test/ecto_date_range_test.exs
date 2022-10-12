@@ -39,6 +39,46 @@ defmodule EctoDateRangeTest do
                   upper_inclusive: true
                 }}
     end
+
+    test "it can take string tuples" do
+      range = {"1989-09-22", "2021-03-01"}
+
+      assert Ecto.DateRange.cast(range) ==
+               {:ok,
+                %Postgrex.Range{
+                  lower: ~D[1989-09-22],
+                  upper: ~D[2021-03-01],
+                  lower_inclusive: true,
+                  upper_inclusive: true
+                }}
+
+      range = {"1989-09-22", nil}
+
+      assert Ecto.DateRange.cast(range) ==
+               {:ok,
+                %Postgrex.Range{
+                  lower: ~D[1989-09-22],
+                  upper: :unbound,
+                  lower_inclusive: true,
+                  upper_inclusive: true
+                }}
+
+      range = {nil, "2021-03-01"}
+
+      assert Ecto.DateRange.cast(range) ==
+               {:ok,
+                %Postgrex.Range{
+                  lower: :unbound,
+                  upper: ~D[2021-03-01],
+                  lower_inclusive: true,
+                  upper_inclusive: true
+                }}
+    end
+
+    test "invalid dates are errors" do
+      assert Ecto.DateRange.cast({"09-22-1989", "2021-03-01"}) == :error
+      assert Ecto.DateRange.cast({nil, "blah"}) == :error
+    end
   end
 
   describe "dump/1" do

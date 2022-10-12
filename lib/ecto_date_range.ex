@@ -11,19 +11,21 @@ defmodule Ecto.DateRange do
   ## Casting
 
   `Ecto.DateRange` provides a couple of conveniences when casting data. All valid
-  data will be cast into a `%Postgrex.Range{}` struct. When supplied to an Ecto.Changeset,
+  data will be cast into a `t:Postgrex.Range.t/0` struct. When supplied to an Ecto.Changeset,
   the following types are valid
 
-  * `Date.Range.t()` will be treated as an inclusive range
-  * `{Date.t() | nil, Date.t() | nil}` can be used to express unbounded ranges,
+  * `t:Date.Range.t/0` will be treated as an inclusive range
+  * `{t:date() | t:String.t/0, t:date() | t:String.t/0}` can be used to express unbounded ranges,
   where `nil` represents an unbounded endpoint
-  * `Postgrex.Range.t()` will be treated as a valid range representation
+  * `t:Postgrex.Range.t/0` will be treated as a valid range representation
 
   ## Loading
 
   All data loaded from the database will be normalized into an inclusive range
   to align with the semantics of `Date.Range.t()`
   """
+
+  @type date :: nil | Date.t()
 
   use Ecto.Type
 
@@ -35,11 +37,10 @@ defmodule Ecto.DateRange do
     {:ok, to_postgrex_range(range)}
   end
 
-  def cast({lower, upper} = range) do
-    if valid_date?(lower) and valid_date?(upper) do
-      {:ok, to_postgrex_range(range)}
-    else
-      :error
+  def cast({lower, upper}) do
+    with {:ok, lower} <- cast_date(lower),
+         {:ok, upper} <- cast_date(upper) do
+      {:ok, to_postgrex_range({lower, upper})}
     end
   end
 
@@ -123,7 +124,11 @@ defmodule Ecto.DateRange do
     end
   end
 
-  defp valid_date?(nil), do: true
-  defp valid_date?(%Date{}), do: true
-  defp valid_date?(_), do: false
+  defp cast_date(d) do
+    case d do
+      %Date{} -> {:ok, d}
+      nil -> {:ok, nil}
+      other -> Ecto.Type.cast(:date, other)
+    end
+  end
 end
