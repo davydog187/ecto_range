@@ -64,7 +64,7 @@ defmodule Ecto.DateRange do
       iex> Ecto.DateRange.to_postgrex_range(Date.range(~D[1989-09-22], ~D[2021-03-01]))
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
   """
-  @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t() | {Date.t() | nil, Date.t() | nil}) ::
+  @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t() | {date, date()}) ::
           Postgrex.Range.t()
   def to_postgrex_range(%Postgrex.Range{} = range), do: range
 
