@@ -4,7 +4,7 @@ defmodule TestApp.Repo.Migrations.TestApp do
   def change do
     create table(:my_table) do
       add :name, :string
-      add :foo, :daterange
+      add :range, :daterange
     end
   end
 end

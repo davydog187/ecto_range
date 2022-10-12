@@ -28,7 +28,7 @@ defmodule EctoDateRange.MixProject do
     [
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:ecto, "~> 3.9"},
+      {:ecto, "~> 3.6"},
       {:ecto_sql, "~> 3.9", only: [:test]},
       {:postgrex, "~> 0.16.5"}
     ]

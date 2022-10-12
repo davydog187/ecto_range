@@ -1,6 +1,28 @@
 defmodule Ecto.DateRange do
   @moduledoc """
   A custom type for working with the Postgres [daterange](https://www.postgresql.org/docs/current/rangetypes.html#RANGETYPES-BUILTIN) type.
+
+      iex> range = Date.range(~D[1989-09-22], ~D[2021-03-01])
+      iex> cs = TestApp.Table.changeset(%TestApp.Table{name: "Ecto.DateRange"}, %{range: range})
+      iex> cs.changes
+      %{range: %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}}
+
+
+  ## Casting
+
+  `Ecto.DateRange` provides a couple of conveniences when casting data. All valid
+  data will be cast into a `%Postgrex.Range{}` struct. When supplied to an Ecto.Changeset,
+  the following types are valid
+
+  * `Date.Range.t()` will be treated as an inclusive range
+  * `{Date.t() | nil, Date.t() | nil}` can be used to express unbounded ranges,
+  where `nil` represents an unbounded endpoint
+  * `Postgrex.Range.t()` will be treated as a valid range representation
+
+  ## Loading
+
+  All data loaded from the database will be normalized into an inclusive range
+  to align with the semantics of `Date.Range.t()`
   """
 
   use Ecto.Type
@@ -11,6 +33,14 @@ defmodule Ecto.DateRange do
   @impl Ecto.Type
   def cast(%Date.Range{} = range) do
     {:ok, to_postgrex_range(range)}
+  end
+
+  def cast({lower, upper} = range) do
+    if valid_date?(lower) and valid_date?(upper) do
+      {:ok, to_postgrex_range(range)}
+    else
+      :error
+    end
   end
 
   @impl Ecto.Type
@@ -28,12 +58,13 @@ defmodule Ecto.DateRange do
   end
 
   @doc """
-  Converts `Date.Range.t()` into a `Postgrex.Range.t()`
+  Converts valid `Date.Range.t()` or `Date.t()` tuples into a `Postgrex.Range.t()`
 
       iex> Ecto.DateRange.to_postgrex_range(Date.range(~D[1989-09-22], ~D[2021-03-01]))
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
   """
-  @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t()) :: Postgrex.Range.t()
+  @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t() | {Date.t() | nil, Date.t() | nil}) ::
+          Postgrex.Range.t()
   def to_postgrex_range(%Postgrex.Range{} = range), do: range
 
   def to_postgrex_range(%Date.Range{first: first, last: last}) do
@@ -41,6 +72,15 @@ defmodule Ecto.DateRange do
       lower: first,
       lower_inclusive: true,
       upper: last,
+      upper_inclusive: true
+    }
+  end
+
+  def to_postgrex_range({lower, upper}) do
+    %Postgrex.Range{
+      lower: if(is_nil(lower), do: :unbound, else: lower),
+      upper: if(is_nil(upper), do: :unbound, else: upper),
+      lower_inclusive: true,
       upper_inclusive: true
     }
   end
@@ -82,4 +122,8 @@ defmodule Ecto.DateRange do
       %{range | lower_inclusive: true, lower: Date.add(range.lower, 1)}
     end
   end
+
+  defp valid_date?(nil), do: true
+  defp valid_date?(%Date{}), do: true
+  defp valid_date?(_), do: false
 end
