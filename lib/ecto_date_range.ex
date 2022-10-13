@@ -7,7 +7,6 @@ defmodule Ecto.DateRange do
       iex> cs.changes
       %{range: %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}}
 
-
   ## Casting
 
   `Ecto.DateRange` provides a couple of conveniences when casting data. All valid
@@ -34,6 +33,10 @@ defmodule Ecto.DateRange do
 
   @impl Ecto.Type
   def cast(%Date.Range{} = range) do
+    {:ok, to_postgrex_range(range)}
+  end
+
+  def cast(%Postgrex.Range{} = range) do
     {:ok, to_postgrex_range(range)}
   end
 
@@ -126,7 +129,6 @@ defmodule Ecto.DateRange do
 
   defp cast_date(d) do
     case d do
-      %Date{} -> {:ok, d}
       nil -> {:ok, nil}
       "" -> {:ok, nil}
       other -> Ecto.Type.cast(:date, other)

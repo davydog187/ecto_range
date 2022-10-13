@@ -16,6 +16,17 @@ defmodule EctoDateRangeTest do
                 }}
     end
 
+    test "it can take Postgrex.Range.t()" do
+      range = %Postgrex.Range{
+        lower: ~D[1989-09-22],
+        upper: ~D[2021-03-01],
+        upper_inclusive: true,
+        lower_inclusive: false
+      }
+
+      assert Ecto.DateRange.cast(range) == {:ok, range}
+    end
+
     test "it can take date tuples" do
       range = {~D[1989-09-22], ~D[2021-03-01]}
 
