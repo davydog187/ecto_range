@@ -6,22 +6,22 @@ defmodule Ecto.DateRange.IntegrationTest do
   test "it can cast new data" do
     %{first: first, last: last} = range = range()
 
-    assert Table.changeset(%Table{}, %{name: "name", range: range}) == %Ecto.Changeset{
+    changeset = Table.changeset(%Table{}, %{name: "name", range: range})
+
+    assert %Ecto.Changeset{
              changes: %{
                range: %Postgrex.Range{
-                 lower: first,
-                 upper: last,
+                 lower: ^first,
+                 upper: ^last,
                  lower_inclusive: true,
                  upper_inclusive: true
                },
                name: "name"
              },
-             required: [:name, :range],
              data: %TestApp.Table{id: nil, name: nil, range: nil},
-             params: %{"range" => Date.range(first, last), "name" => "name"},
-             types: %{range: Ecto.DateRange, id: :id, name: :string},
+             params: %{"range" => ^range, "name" => "name"},
              valid?: true
-           }
+           } = changeset
   end
 
   test "it can cast against existing data" do
@@ -29,32 +29,33 @@ defmodule Ecto.DateRange.IntegrationTest do
              cs = Table.changeset(%Table{}, %{name: "name", range: range()})
 
     assert %Table{} = t = Ecto.Changeset.apply_changes(cs)
+    range = Date.range(~D[2020-01-01], ~D[2020-12-31])
 
-    assert Table.changeset(t, %{range: Date.range(~D[2020-01-01], ~D[2020-12-31])}) ==
-             %Ecto.Changeset{
-               changes: %{
-                 range: %Postgrex.Range{
-                   lower: ~D[2020-01-01],
-                   upper: ~D[2020-12-31],
-                   lower_inclusive: true,
-                   upper_inclusive: true
-                 }
-               },
-               data: %TestApp.Table{
-                 id: nil,
-                 name: "name",
-                 range: %Postgrex.Range{
-                   lower: ~D[1989-09-22],
-                   upper: ~D[2021-03-01],
-                   lower_inclusive: true,
-                   upper_inclusive: true
-                 }
-               },
-               params: %{"range" => Date.range(~D[2020-01-01], ~D[2020-12-31])},
-               required: [:name, :range],
-               types: %{range: Ecto.DateRange, id: :id, name: :string},
-               valid?: true
-             }
+    changeset = Table.changeset(t, %{range: range})
+
+    assert %Ecto.Changeset{
+             changes: %{
+               range: %Postgrex.Range{
+                 lower: ~D[2020-01-01],
+                 upper: ~D[2020-12-31],
+                 lower_inclusive: true,
+                 upper_inclusive: true
+               }
+             },
+             data: %TestApp.Table{
+               id: nil,
+               name: "name",
+               range: %Postgrex.Range{
+                 lower: ~D[1989-09-22],
+                 upper: ~D[2021-03-01],
+                 lower_inclusive: true,
+                 upper_inclusive: true
+               }
+             },
+             params: %{"range" => ^range},
+             required: [:name],
+             valid?: true
+           } = changeset
   end
 
   test "can round trip Date.Range through the database" do
@@ -140,7 +141,7 @@ defmodule Ecto.DateRange.IntegrationTest do
       }
 
       assert {:error, error} = TestApp.Context.create_table(%{name: "a", int4range: range})
-      assert [int4range: {"is invalid", [type: Ecto.Int4range, validation: :cast]}] = error.errors
+      assert [int4range: {"is invalid", [type: Ecto.Int4Range, validation: :cast]}] = error.errors
     end
   end
 

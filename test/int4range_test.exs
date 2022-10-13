@@ -1,4 +1,4 @@
-defmodule Ecto.Int4rangeTest do
+defmodule Ecto.Int4RangeTest do
   use Ecto.DateRange.DataCase
 
   describe "cast/1" do
@@ -10,13 +10,13 @@ defmodule Ecto.Int4rangeTest do
         lower_inclusive: false
       }
 
-      assert Ecto.Int4range.cast(range) == {:ok, range}
+      assert Ecto.Int4Range.cast(range) == {:ok, range}
     end
 
     test "it can take a tuple" do
       range = {1, 3}
 
-      assert Ecto.Int4range.cast(range) ==
+      assert Ecto.Int4Range.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: 1,
@@ -34,7 +34,7 @@ defmodule Ecto.Int4rangeTest do
         lower_inclusive: false
       }
 
-      assert Ecto.Int4range.cast(range) == :error
+      assert Ecto.Int4Range.cast(range) == :error
     end
   end
 end

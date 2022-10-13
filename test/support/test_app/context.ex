@@ -1,4 +1,6 @@
 defmodule TestApp.Context do
+  @moduledoc false
+
   alias TestApp.Table
   alias TestApp.Repo
 

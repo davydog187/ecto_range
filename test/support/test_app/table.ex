@@ -7,7 +7,7 @@ defmodule TestApp.Table do
   schema "my_table" do
     field(:name, :string)
     field(:range, Ecto.DateRange)
-    field(:int4range, Ecto.Int4range)
+    field(:int4range, Ecto.Int4Range)
   end
 
   def changeset(table, params) do
