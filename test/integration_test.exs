@@ -1,4 +1,4 @@
-defmodule EctoDateRange.IntegrationTest do
+defmodule Ecto.DateRange.IntegrationTest do
   use Ecto.DateRange.DataCase
 
   alias TestApp.Table
@@ -116,6 +116,32 @@ defmodule EctoDateRange.IntegrationTest do
              id: ^id,
              name: "a"
            } = TestApp.Repo.get!(Table, id)
+  end
+
+  describe "int4range" do
+    test "can round trip a range through the database" do
+      range = %Postgrex.Range{
+        lower: 1,
+        upper: 3,
+        lower_inclusive: true,
+        upper_inclusive: true
+      }
+
+      assert %Table{id: id} = TestApp.Repo.insert!(%Table{name: "a", int4range: range})
+      assert %TestApp.Table{id: ^id, int4range: ^range, name: "a"} = TestApp.Repo.get!(Table, id)
+    end
+
+    test "returns an error if integers outside the int4 range are given" do
+      range = %Postgrex.Range{
+        lower: -2_147_483_649,
+        upper: 2_147_483_648,
+        lower_inclusive: true,
+        upper_inclusive: true
+      }
+
+      assert {:error, error} = TestApp.Context.create_table(%{name: "a", int4range: range})
+      assert [int4range: {"is invalid", [type: Ecto.Int4range, validation: :cast]}] = error.errors
+    end
   end
 
   def range(_context \\ %{}) do
