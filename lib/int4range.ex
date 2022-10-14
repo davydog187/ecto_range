@@ -11,12 +11,14 @@ defmodule Ecto.Int4Range do
   def type, do: :int4range
 
   @impl Ecto.Type
-  def cast(%Postgrex.Range{} = range) do
-    to_postgrex_range(range)
+  def cast(%Postgrex.Range{lower: lower, upper: upper} = range)
+      when lower in @int4_range and upper in @int4_range do
+    {:ok, to_postgrex_range(range)}
   end
 
-  def cast({lower, upper}) do
-    to_postgrex_range({lower, upper})
+  def cast({lower, upper})
+      when lower in @int4_range and upper in @int4_range do
+    {:ok, to_postgrex_range({lower, upper})}
   end
 
   def cast(_), do: :error
@@ -43,24 +45,17 @@ defmodule Ecto.Int4Range do
 
   """
   @spec to_postgrex_range(Postgrex.Range.t() | {integer(), integer()}) ::
-          Postgrex.Range.t() | :error
+          Postgrex.Range.t()
+  def to_postgrex_range(%Postgrex.Range{} = range), do: range
+
   def to_postgrex_range({lower, upper}) do
-    range = %Postgrex.Range{
+    %Postgrex.Range{
       lower: if(is_nil(lower), do: :unbound, else: lower),
       upper: if(is_nil(upper), do: :unbound, else: upper),
       lower_inclusive: true,
       upper_inclusive: true
     }
-
-    to_postgrex_range(range)
   end
-
-  def to_postgrex_range(%Postgrex.Range{lower: lower, upper: upper} = range)
-      when lower in @int4_range and upper in @int4_range do
-    {:ok, range}
-  end
-
-  def to_postgrex_range(_), do: :error
 
   @doc """
   Converts a Postgrex.Range.t() into a normalized form. For bounded ranges,
