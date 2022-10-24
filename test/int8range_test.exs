@@ -26,7 +26,7 @@ defmodule Ecto.Int8RangeTest do
                 }}
     end
 
-    test "it blocks values not in the Int4 range" do
+    test "it blocks values not in the Int8 range" do
       range = %Postgrex.Range{
         lower: -9_223_372_036_854_775_809,
         upper: 9_223_372_036_854_775_808,

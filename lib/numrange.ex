@@ -23,8 +23,7 @@ defmodule Ecto.NumRange do
     {:ok, to_postgrex_range(range)}
   end
 
-  def cast({lower, upper})
-      when is_number(lower) and is_number(upper) do
+  def cast({lower, upper}) when is_number(lower) and is_number(upper) do
     {:ok, to_postgrex_range({lower, upper})}
   end
 
