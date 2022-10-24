@@ -1,6 +1,7 @@
 defmodule Ecto.Int8Range do
   @moduledoc """
   A Postgres range of `int8` integers. Equivalent to `int8range`.
+  Allows `bigint` values.
   """
 
   use Ecto.Type
@@ -40,7 +41,7 @@ defmodule Ecto.Int8Range do
 
   ## Examples
 
-      iex> Ecto.DateRange.to_postgrex_range({1, 3})
+      iex> Ecto.Int8Range.to_postgrex_range({1, 3})
       %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """
@@ -62,11 +63,11 @@ defmodule Ecto.Int8Range do
   it will make the lower and upper bounds inclusive.
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
-      iex> Ecto.Int4Range.normalize_range(range)
+      iex> Ecto.Int8Range.normalize_range(range)
       %Postgrex.Range{lower: 1, upper: 2, lower_inclusive: true, upper_inclusive: true}
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: false, upper_inclusive: true}
-      iex> Ecto.Int4Range.normalize_range(range)
+      iex> Ecto.Int8Range.normalize_range(range)
       %Postgrex.Range{lower: 2, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """

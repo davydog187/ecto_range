@@ -40,7 +40,7 @@ defmodule Ecto.Int4Range do
 
   ## Examples
 
-      iex> Ecto.DateRange.to_postgrex_range({1, 3})
+      iex> Ecto.Int4Range.to_postgrex_range({1, 3})
       %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """
