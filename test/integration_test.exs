@@ -147,6 +147,32 @@ defmodule Ecto.DateRange.IntegrationTest do
     end
   end
 
+  describe "int8range" do
+    test "can round trip a range through the database" do
+      range = %Postgrex.Range{
+        lower: -2_147_483_649,
+        upper: 2_147_483_648,
+        lower_inclusive: true,
+        upper_inclusive: true
+      }
+
+      assert %Table{id: id} = TestApp.Repo.insert!(%Table{name: "a", int8range: range})
+      assert %TestApp.Table{id: ^id, int8range: ^range, name: "a"} = TestApp.Repo.get!(Table, id)
+    end
+
+    test "returns an error if integers outside the int8 range are given" do
+      range = %Postgrex.Range{
+        lower: -9_223_372_036_854_775_809,
+        upper: 9_223_372_036_854_775_808,
+        lower_inclusive: true,
+        upper_inclusive: true
+      }
+
+      assert {:error, error} = TestApp.Context.create_table(%{name: "a", int8range: range})
+      assert [int8range: {"is invalid", [type: Ecto.Int8Range, validation: :cast]}] = error.errors
+    end
+  end
+
   def range(_context \\ %{}) do
     Date.range(~D[1989-09-22], ~D[2021-03-01])
   end
