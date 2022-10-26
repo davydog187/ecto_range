@@ -79,11 +79,11 @@ defmodule Ecto.NumRange do
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
       iex> Ecto.NumRange.normalize_range(range)
-      %Postgrex.Range{lower: Decimal<1>, upper: Decimal<2.999999999>, lower_inclusive: true, upper_inclusive: true}
+      %Postgrex.Range{lower: %Decimal{coef: 1}, upper: %Decimal{coef: 2999999999, exp: -9}, lower_inclusive: true, upper_inclusive: true}
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: false, upper_inclusive: true}
       iex> Ecto.NumRange.normalize_range(range)
-      %Postgrex.Range{lower: Decimal<1.000000001>, upper: Decimal<3>, lower_inclusive: true, upper_inclusive: true}
+      %Postgrex.Range{lower: %Decimal{coef: 1000000001, exp: -9}, upper: %Decimal{coef: 3}, lower_inclusive: true, upper_inclusive: true}
 
   """
   def normalize_range(%Postgrex.Range{lower: lower, upper: upper} = range)

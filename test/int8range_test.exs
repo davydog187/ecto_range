@@ -1,6 +1,8 @@
 defmodule Ecto.Int8RangeTest do
   use Ecto.DateRange.DataCase
 
+  doctest Ecto.Int8Range
+
   describe "cast/1" do
     test "it can take a Postgrex.Range.t()" do
       range = %Postgrex.Range{
