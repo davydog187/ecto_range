@@ -61,6 +61,8 @@ defmodule Ecto.Int4Range do
   Converts a Postgrex.Range.t() into a normalized form. For bounded ranges,
   it will make the lower and upper bounds inclusive.
 
+  ## Examples
+
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
       iex> Ecto.Int4Range.normalize_range(range)
       %Postgrex.Range{lower: 1, upper: 2, lower_inclusive: true, upper_inclusive: true}

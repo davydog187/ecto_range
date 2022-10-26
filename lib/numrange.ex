@@ -77,6 +77,10 @@ defmodule Ecto.NumRange do
   Converts a Postgrex.Range.t() into a normalized form. For bounded ranges,
   it will make the lower and upper bounds inclusive.
 
+  All upper and lower bounds are converted to `%Decimal{}` structs, if necessary.
+
+  ## Examples
+
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
       iex> Ecto.NumRange.normalize_range(range)
       %Postgrex.Range{lower: %Decimal{coef: 1}, upper: %Decimal{coef: 2999999999, exp: -9}, lower_inclusive: true, upper_inclusive: true}
@@ -86,18 +90,15 @@ defmodule Ecto.NumRange do
       %Postgrex.Range{lower: %Decimal{coef: 1000000001, exp: -9}, upper: %Decimal{coef: 3}, lower_inclusive: true, upper_inclusive: true}
 
   """
-  def normalize_range(%Postgrex.Range{lower: lower, upper: upper} = range)
-      when is_number(lower) and is_number(upper) do
+  def normalize_range(%Postgrex.Range{} = range) do
     range
     |> normalize_upper()
     |> normalize_lower()
   end
 
-  def normalize_range(%Postgrex.Range{} = range), do: range
-
-  defp normalize_upper(%Postgrex.Range{} = range) do
+  defp normalize_upper(%Postgrex.Range{upper: upper} = range) do
     if range.upper_inclusive do
-      range
+      %{range | upper: to_decimal(upper)}
     else
       %{
         range
@@ -107,9 +108,9 @@ defmodule Ecto.NumRange do
     end
   end
 
-  defp normalize_lower(%Postgrex.Range{} = range) do
+  defp normalize_lower(%Postgrex.Range{lower: lower} = range) do
     if range.lower_inclusive do
-      range
+      %{range | lower: to_decimal(lower)}
     else
       %{
         range
