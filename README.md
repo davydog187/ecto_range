@@ -6,6 +6,9 @@
 
 `EctoRange` is a tiny library that provides Ecto custom types for all [Postgres Range types](https://www.postgresql.org/docs/current/rangetypes.html).
 
+The main design goal of `EctoRange` is to be easy to use with native Elixir types,
+while providing the full flexibility of Postgres Range types inside of Ecto.
+
 | Postgres type | `Ecto.Type`               |
 | ------------- | ------------------------- |
 | int4range     | `EctoRange.Int4`          |
@@ -31,3 +34,10 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/ectorange>.
+
+## Alternative libraries
+
+If you're unhappy with the feature set`EctoRange`, there are some alternative libraries that provide similar functionality
+
+- [ecto_date_time_range](https://github.com/synchronal/ecto_date_time_range)
+- [pg_ranges](https://github.com/vforgione/pg_ranges)
