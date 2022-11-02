@@ -13,6 +13,7 @@
 | numrange      | `EctoRange.Num`           |
 | tsrange       | `EctoRange.NaiveDatetime` |
 | tstzrange     | `EctoRange.Datetime`      |
+| daterange     | `EctoRange.Date`          |
 
 ## Installation
 
