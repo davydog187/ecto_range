@@ -1,10 +1,10 @@
-defmodule EctoDateRange.MixProject do
+defmodule EctoRange.MixProject do
   use Mix.Project
 
   def project do
     [
       aliases: aliases(),
-      app: :ecto_date_range,
+      app: :ectorange,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),

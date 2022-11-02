@@ -1,12 +1,12 @@
-defmodule EctoDateRangeTest do
+defmodule EctoRange.DateTest do
   use ExUnit.Case
-  doctest Ecto.DateRange
+  doctest EctoRange.Date
 
   describe "cast/1" do
     test "it can take Date.Range.t()" do
       range = Date.range(~D[1989-09-22], ~D[2021-03-01])
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: ~D[1989-09-22],
@@ -24,13 +24,13 @@ defmodule EctoDateRangeTest do
         lower_inclusive: false
       }
 
-      assert Ecto.DateRange.cast(range) == {:ok, range}
+      assert EctoRange.Date.cast(range) == {:ok, range}
     end
 
     test "it can take date tuples" do
       range = {~D[1989-09-22], ~D[2021-03-01]}
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: ~D[1989-09-22],
@@ -41,7 +41,7 @@ defmodule EctoDateRangeTest do
 
       range = {~D[1989-09-22], nil}
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: ~D[1989-09-22],
@@ -54,7 +54,7 @@ defmodule EctoDateRangeTest do
     test "it can take string tuples" do
       range = {"1989-09-22", "2021-03-01"}
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: ~D[1989-09-22],
@@ -65,7 +65,7 @@ defmodule EctoDateRangeTest do
 
       range = {"1989-09-22", nil}
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: ~D[1989-09-22],
@@ -77,7 +77,7 @@ defmodule EctoDateRangeTest do
       # treat empty string as nil
       range = {"", "2021-03-01"}
 
-      assert Ecto.DateRange.cast(range) ==
+      assert EctoRange.Date.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: :unbound,
@@ -88,8 +88,8 @@ defmodule EctoDateRangeTest do
     end
 
     test "invalid dates are errors" do
-      assert Ecto.DateRange.cast({"09-22-1989", "2021-03-01"}) == :error
-      assert Ecto.DateRange.cast({nil, "blah"}) == :error
+      assert EctoRange.Date.cast({"09-22-1989", "2021-03-01"}) == :error
+      assert EctoRange.Date.cast({nil, "blah"}) == :error
     end
   end
 

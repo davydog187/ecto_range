@@ -1,4 +1,4 @@
-defmodule Ecto.NumRange do
+defmodule EctoRange.Num do
   @moduledoc """
   A Postgres range of `numeric` values. Equivalent to `numrange`.
   Allows numeric values of all precisions.
@@ -50,7 +50,7 @@ defmodule Ecto.NumRange do
 
   ## Examples
 
-      iex> Ecto.DateRange.to_postgrex_range({1, 3})
+      iex> EctoRange.Date.to_postgrex_range({1, 3})
       %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """
@@ -82,11 +82,11 @@ defmodule Ecto.NumRange do
   ## Examples
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
-      iex> Ecto.NumRange.normalize_range(range)
+      iex> EctoRange.Num.normalize_range(range)
       %Postgrex.Range{lower: %Decimal{coef: 1}, upper: %Decimal{coef: 2999999999, exp: -9}, lower_inclusive: true, upper_inclusive: true}
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: false, upper_inclusive: true}
-      iex> Ecto.NumRange.normalize_range(range)
+      iex> EctoRange.Num.normalize_range(range)
       %Postgrex.Range{lower: %Decimal{coef: 1000000001, exp: -9}, upper: %Decimal{coef: 3}, lower_inclusive: true, upper_inclusive: true}
 
   """

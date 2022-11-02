@@ -1,24 +1,23 @@
-defmodule Ecto.Int8Range do
+defmodule EctoRange.Int4 do
   @moduledoc """
-  A Postgres range of `int8` integers. Equivalent to `int8range`.
-  Allows `bigint` values.
+  A Postgres range of `int4` integers. Equivalent to `int4range`.
   """
 
   use Ecto.Type
 
-  @int8_range -9_223_372_036_854_775_808..9_223_372_036_854_775_807
+  @int4_range -2_147_483_648..2_147_483_647
 
   @impl Ecto.Type
-  def type, do: :int8range
+  def type, do: :int4range
 
   @impl Ecto.Type
   def cast(%Postgrex.Range{lower: lower, upper: upper} = range)
-      when lower in @int8_range and upper in @int8_range do
+      when lower in @int4_range and upper in @int4_range do
     {:ok, to_postgrex_range(range)}
   end
 
   def cast({lower, upper})
-      when lower in @int8_range and upper in @int8_range do
+      when lower in @int4_range and upper in @int4_range do
     {:ok, to_postgrex_range({lower, upper})}
   end
 
@@ -41,7 +40,7 @@ defmodule Ecto.Int8Range do
 
   ## Examples
 
-      iex> Ecto.Int8Range.to_postgrex_range({1, 3})
+      iex> EctoRange.Int4.to_postgrex_range({1, 3})
       %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """
@@ -65,11 +64,11 @@ defmodule Ecto.Int8Range do
   ## Examples
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: true, upper_inclusive: false}
-      iex> Ecto.Int8Range.normalize_range(range)
+      iex> EctoRange.Int4.normalize_range(range)
       %Postgrex.Range{lower: 1, upper: 2, lower_inclusive: true, upper_inclusive: true}
 
       iex> range = %Postgrex.Range{lower: 1, upper: 3, lower_inclusive: false, upper_inclusive: true}
-      iex> Ecto.Int8Range.normalize_range(range)
+      iex> EctoRange.Int4.normalize_range(range)
       %Postgrex.Range{lower: 2, upper: 3, lower_inclusive: true, upper_inclusive: true}
 
   """
