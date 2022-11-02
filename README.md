@@ -1,10 +1,18 @@
-# EctoRange.Date
+# EctoRange
 
 [![Build Status](https://github.com/bitfo/ectorange/workflows/CI/badge.svg?branch=main)](https://github.com/bitfo/ectorange/actions) [![Hex pm](https://img.shields.io/hexpm/v/ectorange.svg?style=flat)](https://hex.pm/packages/ectorange) [![Hexdocs.pm](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ectorange/)
 
 <!-- MDOC !-->
 
-`EctoRange.DateRange` is a tiny library that provides an Ecto custom type for `Date.` and the underlying [daterange](https://www.postgresql.org/docs/14/rangetypes.html#RANGETYPES-BUILTIN) postgres type.
+`EctoRange` is a tiny library that provides Ecto custom types for all [Postgres Range types](https://www.postgresql.org/docs/current/rangetypes.html).
+
+| Postgres type | `Ecto.Type`               |
+| ------------- | ------------------------- |
+| int4range     | `EctoRange.Int4`          |
+| int8range     | `EctoRange.Int8`          |
+| numrange      | `EctoRange.Num`           |
+| tsrange       | `EctoRange.NaiveDatetime` |
+| tstzrange     | `EctoRange.Datetime`      |
 
 ## Installation
 
