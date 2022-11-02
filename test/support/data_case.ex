@@ -1,4 +1,4 @@
-defmodule Ecto.DateRange.DataCase do
+defmodule EctoRange.Date.DataCase do
   @moduledoc false
   use ExUnit.CaseTemplate
 
@@ -9,12 +9,12 @@ defmodule Ecto.DateRange.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Ecto.DateRange.DataCase
+      import EctoRange.Date.DataCase
     end
   end
 
   setup tags do
-    Ecto.DateRange.DataCase.setup_sandbox(tags)
+    EctoRange.Date.DataCase.setup_sandbox(tags)
     :ok
   end
 

@@ -1,15 +1,15 @@
-defmodule Ecto.DateRange do
+defmodule EctoRange.Date do
   @moduledoc """
   A custom type for working with the Postgres [daterange](https://www.postgresql.org/docs/current/rangetypes.html#RANGETYPES-BUILTIN) type.
 
       iex> range = Date.range(~D[1989-09-22], ~D[2021-03-01])
-      iex> cs = TestApp.Table.changeset(%TestApp.Table{name: "Ecto.DateRange"}, %{range: range})
+      iex> cs = TestApp.Table.changeset(%TestApp.Table{name: "EctoRange.Date"}, %{range: range})
       iex> cs.changes
       %{range: %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}}
 
   ## Casting
 
-  `Ecto.DateRange` provides a couple of conveniences when casting data. All valid
+  `EctoRange.Date` provides a couple of conveniences when casting data. All valid
   data will be cast into a `t:Postgrex.Range.t/0` struct. When supplied to an Ecto.Changeset,
   the following types are valid
 
@@ -64,7 +64,7 @@ defmodule Ecto.DateRange do
   @doc """
   Converts valid `Date.Range.t()` or `Date.t()` tuples into a `Postgrex.Range.t()`
 
-      iex> Ecto.DateRange.to_postgrex_range(Date.range(~D[1989-09-22], ~D[2021-03-01]))
+      iex> EctoRange.Date.to_postgrex_range(Date.range(~D[1989-09-22], ~D[2021-03-01]))
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
   """
   @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t() | {date, date()}) ::
@@ -95,11 +95,11 @@ defmodule Ecto.DateRange do
   of Date.Range.t()
 
       iex> range = %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-02], lower_inclusive: true, upper_inclusive: false}
-      iex> Ecto.DateRange.normalize_range(range)
+      iex> EctoRange.Date.normalize_range(range)
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
 
       iex> range = %Postgrex.Range{lower: ~D[1989-09-21], upper: ~D[2021-03-01], lower_inclusive: false, upper_inclusive: true}
-      iex> Ecto.DateRange.normalize_range(range)
+      iex> EctoRange.Date.normalize_range(range)
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
 
   """

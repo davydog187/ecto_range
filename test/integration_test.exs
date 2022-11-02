@@ -1,7 +1,9 @@
-defmodule Ecto.DateRange.IntegrationTest do
-  use Ecto.DateRange.DataCase
+defmodule EctoRange.IntegrationTest do
+  use EctoRange.Date.DataCase
 
   alias TestApp.Table
+
+  @moduletag :integration
 
   describe "daterange" do
     test "it can cast new data" do
@@ -143,7 +145,7 @@ defmodule Ecto.DateRange.IntegrationTest do
       }
 
       assert {:error, error} = TestApp.Context.create_table(%{name: "a", int4range: range})
-      assert [int4range: {"is invalid", [type: Ecto.Int4Range, validation: :cast]}] = error.errors
+      assert [int4range: {"is invalid", [type: EctoRange.Int4, validation: :cast]}] = error.errors
     end
   end
 
@@ -169,7 +171,7 @@ defmodule Ecto.DateRange.IntegrationTest do
       }
 
       assert {:error, error} = TestApp.Context.create_table(%{name: "a", int8range: range})
-      assert [int8range: {"is invalid", [type: Ecto.Int8Range, validation: :cast]}] = error.errors
+      assert [int8range: {"is invalid", [type: EctoRange.Int8, validation: :cast]}] = error.errors
     end
   end
 
@@ -207,7 +209,7 @@ defmodule Ecto.DateRange.IntegrationTest do
       }
 
       assert {:error, error} = TestApp.Context.create_table(%{name: "a", numrange: range})
-      assert [numrange: {"is invalid", [type: Ecto.NumRange, validation: :cast]}] = error.errors
+      assert [numrange: {"is invalid", [type: EctoRange.Num, validation: :cast]}] = error.errors
     end
   end
 

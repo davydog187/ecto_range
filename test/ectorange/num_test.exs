@@ -1,7 +1,7 @@
-defmodule Ecto.NumRangeTest do
-  use Ecto.DateRange.DataCase
+defmodule EctoRange.NumTest do
+  use EctoRange.Date.DataCase
 
-  doctest Ecto.NumRange
+  doctest EctoRange.Num
 
   describe "cast/1" do
     test "it can take a Postgrex.Range.t()" do
@@ -12,13 +12,13 @@ defmodule Ecto.NumRangeTest do
         lower_inclusive: false
       }
 
-      assert Ecto.NumRange.cast(range) == {:ok, range}
+      assert EctoRange.Num.cast(range) == {:ok, range}
     end
 
     test "it can take a tuple" do
       range = {1, 3}
 
-      assert Ecto.NumRange.cast(range) ==
+      assert EctoRange.Num.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: Decimal.new(1),
@@ -31,7 +31,7 @@ defmodule Ecto.NumRangeTest do
     test "it can take floats" do
       range = {1.1, 3.3}
 
-      assert Ecto.NumRange.cast(range) ==
+      assert EctoRange.Num.cast(range) ==
                {:ok,
                 %Postgrex.Range{
                   lower: Decimal.from_float(1.1),
@@ -44,7 +44,7 @@ defmodule Ecto.NumRangeTest do
     test "it errors on non-numeric values" do
       range = {"foo", "bar"}
 
-      assert Ecto.NumRange.cast(range) == :error
+      assert EctoRange.Num.cast(range) == :error
     end
   end
 
@@ -57,7 +57,7 @@ defmodule Ecto.NumRangeTest do
         lower_inclusive: false
       }
 
-      assert Ecto.NumRange.normalize_range(range) ==
+      assert EctoRange.Num.normalize_range(range) ==
                %Postgrex.Range{
                  lower: Decimal.from_float(1.000000001),
                  upper: Decimal.from_float(1.999999999),
