@@ -1,15 +1,20 @@
 defmodule EctoRange.MixProject do
   use Mix.Project
 
+  @url "http://github.com/davydog187/ectorange"
+  @version "0.1.0"
+
   def project do
     [
       aliases: aliases(),
-      app: :ectorange,
-      version: "0.1.0",
+      app: :ecto_range,
+      version: @version,
       elixir: "~> 1.14",
+      package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -20,6 +25,23 @@ defmodule EctoRange.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  defp docs do
+    [
+      main: "EctoRange",
+      source_url: @url,
+      source_ref: "v#{@version}",
+      extras: []
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["Apache 2.0"],
+      maintainers: ["davydog187"],
+      links: %{"Github" => @url}
     ]
   end
 
