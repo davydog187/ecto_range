@@ -31,7 +31,7 @@ defmodule EctoRange.MixProject do
 
   defp docs do
     [
-      main: "EctoRange",
+      main: "EctoRange.Num",
       source_url: @url,
       source_ref: "v#{@version}",
       extras: []
@@ -40,7 +40,7 @@ defmodule EctoRange.MixProject do
 
   defp package do
     [
-      licenses: ["Apache 2.0"],
+      licenses: ["Apache-2.0"],
       maintainers: ["davydog187"],
       links: %{"Github" => @url}
     ]
@@ -53,7 +53,8 @@ defmodule EctoRange.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ecto, "~> 3.6"},
       {:ecto_sql, "~> 3.9", only: [:test]},
-      {:postgrex, "~> 0.16.5"}
+      {:postgrex, "~> 0.16.5"},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false}
     ]
   end
 
