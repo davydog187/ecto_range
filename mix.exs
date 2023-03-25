@@ -13,6 +13,7 @@ defmodule EctoRange.MixProject do
       package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      description: "Ecto support for Postgres Range types",
       deps: deps(),
       docs: docs()
     ]
