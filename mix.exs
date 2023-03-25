@@ -1,7 +1,7 @@
 defmodule EctoRange.MixProject do
   use Mix.Project
 
-  @url "http://github.com/davydog187/ectorange"
+  @url "http://github.com/davydog187/ecto_range"
   @version "0.1.0"
 
   def project do
