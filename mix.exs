@@ -31,7 +31,7 @@ defmodule EctoRange.MixProject do
 
   defp docs do
     [
-      main: "EctoRange.Num",
+      main: "EctoRange",
       source_url: @url,
       source_ref: "v#{@version}",
       extras: []
