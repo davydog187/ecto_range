@@ -55,7 +55,7 @@ iex> alias MyApp.Table
 
 iex> range = Date.range(~D[1989-09-22], ~D[2021-03-01])
 
-iex> cs = Table.changeset(%Table{}, %{name: "table", range: range}}
+iex> cs = Table.changeset(%Table{}, %{name: "table", range: range})
 
 iex> cs.changes
 %Ecto.Changeset{
