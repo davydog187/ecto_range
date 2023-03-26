@@ -9,14 +9,14 @@
 The main design goal of `EctoRange` is to be easy to use with native Elixir types,
 while providing the full flexibility of Postgres Range types inside of Ecto.
 
-| Postgres type | `Ecto.Type`               |
-| ------------- | ------------------------- |
-| int4range     | `EctoRange.Int4`          |
-| int8range     | `EctoRange.Int8`          |
-| numrange      | `EctoRange.Num`           |
-| tsrange       | `EctoRange.NaiveDatetime` |
-| tstzrange     | `EctoRange.Datetime`      |
-| daterange     | `EctoRange.Date`          |
+| Postgres type | `Ecto.Type`             |
+| ------------- | ----------------------- |
+| int4range     | `EctoRange.Int4`        |
+| int8range     | `EctoRange.Int8`        |
+| numrange      | `EctoRange.Num`         |
+| tsrange       | `EctoRange.Timestamp`   |
+| tstzrange     | `EctoRange.TimestampTZ` |
+| daterange     | `EctoRange.Date`        |
 
 ## Installation
 

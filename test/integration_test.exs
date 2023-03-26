@@ -5,9 +5,69 @@ defmodule EctoRange.IntegrationTest do
 
   @moduletag :integration
 
+  describe "tsrange" do
+    test "it can cast new data" do
+      {first, last} = range = timestamp_range()
+
+      changeset = Table.changeset(%Table{}, %{name: "name", tsrange: range})
+
+      assert %Ecto.Changeset{
+               changes: %{
+                 tsrange: %Postgrex.Range{
+                   lower: ^first,
+                   upper: ^last,
+                   lower_inclusive: true,
+                   upper_inclusive: true
+                 },
+                 name: "name"
+               },
+               data: %TestApp.Table{id: nil, name: nil, tsrange: nil},
+               params: %{
+                 "tsrange" => ^range,
+                 "name" => "name"
+               },
+               valid?: true
+             } = changeset
+    end
+
+    test "it can cast against existing data" do
+      assert %Ecto.Changeset{valid?: true} =
+               cs = Table.changeset(%Table{}, %{name: "name", tsrange: timestamp_range()})
+
+      assert %Table{} = t = Ecto.Changeset.apply_changes(cs)
+      range = {~N[2021-03-25 12:00:00], ~N[2023-03-26 12:01:00]}
+
+      changeset = Table.changeset(t, %{tsrange: range})
+
+      assert %Ecto.Changeset{
+               changes: %{
+                 tsrange: %Postgrex.Range{
+                   lower: ~N[2021-03-25 12:00:00],
+                   lower_inclusive: true,
+                   upper: ~N[2023-03-26 12:01:00],
+                   upper_inclusive: true
+                 }
+               },
+               data: %TestApp.Table{
+                 id: nil,
+                 name: "name",
+                 tsrange: %Postgrex.Range{
+                   lower: ~N[2021-03-01 09:30:00],
+                   lower_inclusive: true,
+                   upper: ~N[2023-03-30 10:30:00],
+                   upper_inclusive: true
+                 }
+               },
+               params: %{"tsrange" => ^range},
+               required: [:name],
+               valid?: true
+             } = changeset
+    end
+  end
+
   describe "daterange" do
     test "it can cast new data" do
-      %{first: first, last: last} = range = range()
+      %{first: first, last: last} = range = date_range()
 
       changeset = Table.changeset(%Table{}, %{name: "name", range: range})
 
@@ -29,7 +89,7 @@ defmodule EctoRange.IntegrationTest do
 
     test "it can cast against existing data" do
       assert %Ecto.Changeset{valid?: true} =
-               cs = Table.changeset(%Table{}, %{name: "name", range: range()})
+               cs = Table.changeset(%Table{}, %{name: "name", range: date_range()})
 
       assert %Table{} = t = Ecto.Changeset.apply_changes(cs)
       range = Date.range(~D[2020-01-01], ~D[2020-12-31])
@@ -62,7 +122,7 @@ defmodule EctoRange.IntegrationTest do
     end
 
     test "can round trip Date.Range through the database" do
-      %{first: first, last: last} = range = range()
+      %{first: first, last: last} = range = date_range()
 
       assert %Table{id: id} = TestApp.Repo.insert!(%Table{name: "a", range: range})
 
@@ -213,7 +273,11 @@ defmodule EctoRange.IntegrationTest do
     end
   end
 
-  def range(_context \\ %{}) do
+  def date_range(_context \\ %{}) do
     Date.range(~D[1989-09-22], ~D[2021-03-01])
+  end
+
+  def timestamp_range(_context \\ %{}) do
+    {~N[2021-03-01 09:30:00], ~N[2023-03-30 10:30:00]}
   end
 end
