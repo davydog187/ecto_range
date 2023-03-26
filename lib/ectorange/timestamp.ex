@@ -7,6 +7,8 @@ defmodule EctoRange.Timestamp do
       iex> cs.changes
       %{tsrange: %Postgrex.Range{lower: ~N[2020-10-31 09:30:00], upper: ~N[2020-11-02 10:00:00], lower_inclusive: true, upper_inclusive: true}}
 
+  `tsrange` in Postgres is a continuous range, and does not have any equivalent Elixir struct.
+
   ## Casting
 
   `EctoRange.Timestamp` provides a couple of conveniences when casting data. All valid
