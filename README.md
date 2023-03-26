@@ -1,6 +1,6 @@
 # EctoRange
 
-[![Build Status](https://github.com/bitfo/ectorange/workflows/CI/badge.svg?branch=main)](https://github.com/bitfo/ectorange/actions) [![Hex pm](https://img.shields.io/hexpm/v/ectorange.svg?style=flat)](https://hex.pm/packages/ectorange) [![Hexdocs.pm](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ectorange/)
+[![Build Status](https://github.com/bitfo/ectorange/workflows/CI/badge.svg?branch=main)](https://github.com/bitfo/ectorange/actions) [![Hex pm](https://img.shields.io/hexpm/v/ectorange.svg?style=flat)](https://hex.pm/packages/ectorange) [![Hexdocs.pm](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ectorange/) [Changelog](https://github.com/davydog187/blob/main/CHANGELOG.md)
 
 <!-- MDOC !-->
 

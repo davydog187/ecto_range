@@ -34,7 +34,7 @@ defmodule EctoRange.MixProject do
       main: "EctoRange",
       source_url: @url,
       source_ref: "v#{@version}",
-      extras: []
+      extras: ["CHANGELOG.md"]
     ]
   end
 
