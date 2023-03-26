@@ -8,6 +8,7 @@ defmodule TestApp.Repo.Migrations.TestApp do
       add :int4range, :int4range
       add :int8range, :int8range
       add :numrange, :numrange
+      add :tsrange, :tsrange
     end
   end
 end

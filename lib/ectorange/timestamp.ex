@@ -3,18 +3,17 @@ defmodule EctoRange.Timestamp do
   A custom type for working with the Postgres [tsrange](https://www.postgresql.org/docs/current/rangetypes.html#RANGETYPES-BUILTIN) type.
 
       iex> range = {~N[2020-10-31 09:30:00], ~N[2020-11-02 10:00:00]}
-      iex> cs = TestApp.Table.changeset(%TestApp.Table{name: "EctoRange.Timestamp"}, %{range: range})
+      iex> cs = TestApp.Table.changeset(%TestApp.Table{name: "EctoRange.Timestamp"}, %{tsrange: range})
       iex> cs.changes
-      %{range: %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}}
+      %{tsrange: %Postgrex.Range{lower: ~N[2020-10-31 09:30:00], upper: ~N[2020-11-02 10:00:00], lower_inclusive: true, upper_inclusive: true}}
 
   ## Casting
 
-  `EctoRange.Date` provides a couple of conveniences when casting data. All valid
+  `EctoRange.Timestamp` provides a couple of conveniences when casting data. All valid
   data will be cast into a `t:Postgrex.Range.t/0` struct. When supplied to an Ecto.Changeset,
   the following types are valid
 
-  * `t:Date.Range.t/0` will be treated as an inclusive range
-  * `{t:date() | t:String.t/0, t:date() | t:String.t/0}` can be used to express unbounded ranges,
+  * `{t:timestamp() | t:String.t/0, t:timestamp() | t:String.t/0}` can be used to express unbounded ranges,
   where `nil` represents an unbounded endpoint
   * `t:Postgrex.Range.t/0` will be treated as a valid range representation
 
@@ -24,34 +23,26 @@ defmodule EctoRange.Timestamp do
   to align with the semantics of `Date.Range.t()`
   """
 
-  @type date :: nil | Date.t()
+  @type timestamp :: nil | NaiveDateTime.t()
 
   use Ecto.Type
 
   @impl Ecto.Type
-  def type, do: :daterange
+  def type, do: :tsrange
 
   @impl Ecto.Type
-  def cast(%Date.Range{} = range) do
-    {:ok, to_postgrex_range(range)}
-  end
-
   def cast(%Postgrex.Range{} = range) do
     {:ok, to_postgrex_range(range)}
   end
 
   def cast({lower, upper}) do
-    with {:ok, lower} <- cast_date(lower),
-         {:ok, upper} <- cast_date(upper) do
+    with {:ok, lower} <- cast_timestamp(lower),
+         {:ok, upper} <- cast_timestamp(upper) do
       {:ok, to_postgrex_range({lower, upper})}
     end
   end
 
   @impl Ecto.Type
-  def dump(%Date.Range{} = range) do
-    {:ok, to_postgrex_range(range)}
-  end
-
   def dump(%Postgrex.Range{} = range) do
     {:ok, range}
   end
@@ -62,23 +53,14 @@ defmodule EctoRange.Timestamp do
   end
 
   @doc """
-  Converts valid `Date.Range.t()` or `Date.t()` tuples into a `Postgrex.Range.t()`
+  Converts valid `NaiveDateTime.t()` tuples into a `Postgrex.Range.t()`
 
-      iex> EctoRange.Date.to_postgrex_range(Date.range(~D[1989-09-22], ~D[2021-03-01]))
-      %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
+      iex> EctoRange.Date.to_postgrex_range({~N[2021-03-01 08:30:00], ~N[2023-03-30 10:30:00]})
+      %Postgrex.Range{lower: ~N[2021-03-01 08:30:00], upper: ~N[2023-03-30 10:30:00], lower_inclusive: true, upper_inclusive: true}
   """
-  @spec to_postgrex_range(Date.Range.t() | Postgrex.Range.t() | {date, date()}) ::
+  @spec to_postgrex_range(Postgrex.Range.t() | {timestamp(), timestamp()}) ::
           Postgrex.Range.t()
   def to_postgrex_range(%Postgrex.Range{} = range), do: range
-
-  def to_postgrex_range(%Date.Range{first: first, last: last}) do
-    %Postgrex.Range{
-      lower: first,
-      lower_inclusive: true,
-      upper: last,
-      upper_inclusive: true
-    }
-  end
 
   def to_postgrex_range({lower, upper}) do
     %Postgrex.Range{
@@ -103,7 +85,7 @@ defmodule EctoRange.Timestamp do
       %Postgrex.Range{lower: ~D[1989-09-22], upper: ~D[2021-03-01], lower_inclusive: true, upper_inclusive: true}
 
   """
-  def normalize_range(%Postgrex.Range{upper: %Date{}, lower: %Date{}} = range) do
+  def normalize_range(%Postgrex.Range{upper: %NaiveDateTime{}, lower: %NaiveDateTime{}} = range) do
     range
     |> normalize_upper()
     |> normalize_lower()
@@ -127,11 +109,11 @@ defmodule EctoRange.Timestamp do
     end
   end
 
-  defp cast_date(d) do
+  defp cast_timestamp(d) do
     case d do
       nil -> {:ok, nil}
       "" -> {:ok, nil}
-      other -> Ecto.Type.cast(:date, other)
+      other -> Ecto.Type.cast(:naive_datetime, other)
     end
   end
 end

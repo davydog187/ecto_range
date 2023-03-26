@@ -10,11 +10,12 @@ defmodule TestApp.Table do
     field(:int4range, EctoRange.Int4)
     field(:int8range, EctoRange.Int8)
     field(:numrange, EctoRange.Num)
+    field(:tsrange, EctoRange.Timestamp)
   end
 
   def changeset(table, params) do
     table
-    |> cast(params, [:name, :range, :int4range, :int8range, :numrange])
+    |> cast(params, [:name, :range, :int4range, :int8range, :numrange, :tsrange])
     |> validate_required([:name])
   end
 end
