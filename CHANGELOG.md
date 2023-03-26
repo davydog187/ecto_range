@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 
 - Support for `tsrange` via `EctoRange.Timestamp`
+- Example of `EctoRange.Date` in the README
 
 ## [0.1.0] - 2023-03-25
 
