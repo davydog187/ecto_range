@@ -53,7 +53,7 @@ defmodule EctoRange.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ecto, "~> 3.6"},
       {:ecto_sql, "~> 3.9", only: [:test]},
-      {:postgrex, "~> 0.16.5"},
+      {:postgrex, ">= 0.0.0"},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false}
     ]
   end
