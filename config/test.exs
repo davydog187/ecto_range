@@ -7,4 +7,5 @@ config :ecto_range, TestApp.Repo,
   database: "test_app_test",
   username: "postgres",
   password: "postgres",
-  hostname: "localhost"
+  hostname: "localhost",
+  port: System.get_env("POSTGRES_PORT", "5432")

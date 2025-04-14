@@ -21,8 +21,8 @@ defmodule EctoRange.TimestampTest do
       assert EctoRange.Timestamp.cast(range) ==
                {:ok,
                 %Postgrex.Range{
-                  lower: ~N[2021-03-01 08:30:00],
-                  upper: ~N[2023-03-30 10:30:00],
+                  lower: ~N[2021-03-01 08:30:00.000000],
+                  upper: ~N[2023-03-30 10:30:00.000000],
                   upper_inclusive: true,
                   lower_inclusive: true
                 }}

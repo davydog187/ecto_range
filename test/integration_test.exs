@@ -30,6 +30,23 @@ defmodule EctoRange.IntegrationTest do
              } = changeset
     end
 
+    test "it can write data" do
+      {first, last} = range = timestamp_range()
+
+      changeset = Table.changeset(%Table{}, %{name: "name", tsrange: range})
+
+      assert {:ok, _} = TestApp.Repo.insert(changeset)
+      assert [table] = TestApp.Repo.all(Table)
+
+      assert table.tsrange ==
+               %Postgrex.Range{
+                 upper: last,
+                 lower: first,
+                 lower_inclusive: true,
+                 upper_inclusive: true
+               }
+    end
+
     test "it can cast against existing data" do
       assert %Ecto.Changeset{valid?: true} =
                cs = Table.changeset(%Table{}, %{name: "name", tsrange: timestamp_range()})
@@ -42,9 +59,9 @@ defmodule EctoRange.IntegrationTest do
       assert %Ecto.Changeset{
                changes: %{
                  tsrange: %Postgrex.Range{
-                   lower: ~N[2021-03-25 12:00:00],
+                   lower: ~N[2021-03-25 12:00:00.000000],
                    lower_inclusive: true,
-                   upper: ~N[2023-03-26 12:01:00],
+                   upper: ~N[2023-03-26 12:01:00.000000],
                    upper_inclusive: true
                  }
                },
@@ -52,9 +69,9 @@ defmodule EctoRange.IntegrationTest do
                  id: nil,
                  name: "name",
                  tsrange: %Postgrex.Range{
-                   lower: ~N[2021-03-01 09:30:00],
+                   lower: ~N[2021-03-01 09:30:00.000000],
                    lower_inclusive: true,
-                   upper: ~N[2023-03-30 10:30:00],
+                   upper: ~N[2023-03-30 10:30:00.000000],
                    upper_inclusive: true
                  }
                },
@@ -278,6 +295,6 @@ defmodule EctoRange.IntegrationTest do
   end
 
   def timestamp_range(_context \\ %{}) do
-    {~N[2021-03-01 09:30:00], ~N[2023-03-30 10:30:00]}
+    {~N[2021-03-01 09:30:00.000000], ~N[2023-03-30 10:30:00.000000]}
   end
 end
