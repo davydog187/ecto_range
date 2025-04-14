@@ -51,6 +51,7 @@ defmodule EctoRange.Timestamp do
 
   @impl Ecto.Type
   def load(%Postgrex.Range{} = range) do
+    dbg(range)
     {:ok, normalize_range(range)}
   end
 
